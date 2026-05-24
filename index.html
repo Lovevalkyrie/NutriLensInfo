@@ -337,6 +337,12 @@
         gap: 18px;
       }
 
+      .equal-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+
       .gallery-stack {
         display: grid;
         gap: 18px;
@@ -353,14 +359,57 @@
       .figure img {
         display: block;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
       }
 
       .figure figcaption {
         padding: 16px 18px 18px;
         color: var(--muted);
         line-height: 1.6;
+      }
+
+      .hardware-shot img {
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      .app-shot img {
+        aspect-ratio: 10 / 19.5;
+        object-fit: cover;
+        background: #edf3e8;
+      }
+
+      .food-shot img {
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      .hud-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .hud-shot {
+        background: #07090b;
+        border-color: #1d2730;
+      }
+
+      .hud-shot img {
+        aspect-ratio: 16 / 9;
+        object-fit: contain;
+        background: #07090b;
+      }
+
+      .hud-shot figcaption {
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      .mini-gallery {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
       }
 
       .video-frame {
@@ -453,6 +502,8 @@
         .story,
         .audience,
         .gallery-grid,
+        .equal-grid,
+        .hud-layout,
         .footer-card {
           grid-template-columns: 1fr;
         }
@@ -478,7 +529,8 @@
         }
 
         .workflow,
-        .feature-grid {
+        .feature-grid,
+        .mini-gallery {
           grid-template-columns: 1fr;
         }
 
@@ -656,7 +708,7 @@
             <p>The prototype was built to be worn and tested, not just described.</p>
           </div>
           <div class="gallery-grid">
-            <figure class="figure">
+            <figure class="figure hardware-shot">
               <img src="images/wearable-side.jpg" alt="NutriLens side profile showing enclosure and frame integration" />
               <figcaption>
                 The wearable prototype combines a camera mounted on the glasses frame, a
@@ -665,7 +717,7 @@
               </figcaption>
             </figure>
             <div class="gallery-stack">
-              <figure class="figure">
+              <figure class="figure hardware-shot">
                 <img src="images/wearable-front.jpg" alt="Front view of the NutriLens glasses prototype" />
                 <figcaption>
                   Front-facing view of the integrated wearable system and display setup.
@@ -679,6 +731,45 @@
                   <li>physical control interface for interaction</li>
                   <li>BLE communication with the mobile app</li>
                   <li>optional heads-up display mirroring path</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hud">
+        <div class="shell">
+          <div class="section-head">
+            <h2>What the User Sees</h2>
+            <p>The analysis can be mirrored back onto the wearable display for glanceable feedback.</p>
+          </div>
+          <div class="hud-layout">
+            <figure class="figure hud-shot">
+              <img src="images/hud-analysis.png" alt="Dark heads-up display view showing NutriLens analysis in the AR glasses" />
+              <figcaption>
+                This is the in-glasses HUD view: the food label, calories, and macros are
+                mirrored onto the display after the phone finishes the AI analysis.
+              </figcaption>
+            </figure>
+            <div class="gallery-stack">
+              <div class="mini-gallery">
+                <figure class="figure food-shot">
+                  <img src="images/food-salmon.png" alt="Example meal used for NutriLens nutrition analysis" />
+                  <figcaption>Example meal image captured for analysis.</figcaption>
+                </figure>
+                <figure class="figure app-shot">
+                  <img src="images/app-home.png" alt="NutriLens iPhone home screen with BLE connection controls" />
+                  <figcaption>Phone view used to connect to the hardware and receive images.</figcaption>
+                </figure>
+              </div>
+              <article class="panel">
+                <h3>Mirrored workflow</h3>
+                <ul>
+                  <li>capture the food from the wearer’s point of view</li>
+                  <li>send the image to the iPhone over BLE</li>
+                  <li>run AI analysis on the phone</li>
+                  <li>mirror the final nutrition stats back to the glasses HUD</li>
                 </ul>
               </article>
             </div>
@@ -716,15 +807,15 @@
             </article>
           </div>
 
-          <div class="gallery-grid" style="margin-top: 18px">
-            <figure class="figure">
+          <div class="equal-grid" style="margin-top: 18px">
+            <figure class="figure app-shot">
               <img src="images/app-analysis.png" alt="NutriLens iPhone analysis screen" />
               <figcaption>
                 iPhone analysis view showing the capture / analysis flow and nutrition
                 output for a meal.
               </figcaption>
             </figure>
-            <figure class="figure">
+            <figure class="figure app-shot">
               <img src="images/ipad-analysis.png" alt="NutriLens iPad analysis screen" />
               <figcaption>
                 iPad layout showing the same analysis workflow scaled for larger screens.
