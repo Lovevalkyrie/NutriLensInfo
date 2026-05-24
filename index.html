@@ -363,6 +363,29 @@
         line-height: 1.6;
       }
 
+      .video-frame {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .video-shell {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background: #0f140f;
+      }
+
+      .video-shell iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
       .feature-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -509,7 +532,6 @@
             </p>
             <div class="hero-actions">
               <a class="button primary" href="#workflow">See the workflow</a>
-              <a class="button soft" href="https://sites.google.com/view/blakelinutrilens">View project site</a>
             </div>
           </div>
           <div class="hero-card">
@@ -517,6 +539,27 @@
             <div class="hero-caption">
               <strong>Working wearable prototype</strong>
               <span>Camera, control module, mobile app, and heads-up display workflow.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="demo">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Demo Video</h2>
+            <p>See the concept, hardware, and workflow in motion.</p>
+          </div>
+          <div class="video-frame">
+            <div class="video-shell">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/Pgqx_WglWic"
+                title="NutriLens demo video"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
             </div>
           </div>
         </div>
