@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriLens | Wearable Nutrition Guidance</title>
+    <meta
+      name="description"
+      content="NutriLens is an AI-powered smart-glasses system that captures food, analyzes nutrition, and mirrors insights to a mobile app and wearable display."
+    />
+    <style>
+      :root {
+        --bg: #f7f7f0;
+        --surface: #fffef8;
+        --surface-strong: #f1f5e9;
+        --ink: #172117;
+        --muted: #51604f;
+        --line: #d9dfcf;
+        --accent: #a7d595;
+        --accent-deep: #3e7a47;
+        --shadow: 0 18px 40px rgba(36, 56, 30, 0.08);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+        --max: 1200px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Avenir Next", Avenir, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(167, 213, 149, 0.35), transparent 28%),
+          linear-gradient(180deg, #fbfcf7 0%, var(--bg) 100%);
+        color: var(--ink);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(calc(100% - 32px), var(--max));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(16px);
+        background: rgba(251, 252, 247, 0.82);
+        border-bottom: 1px solid rgba(217, 223, 207, 0.7);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 14px 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-decoration: none;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .brand strong {
+        display: block;
+        font-size: 1.1rem;
+        letter-spacing: 0.01em;
+      }
+
+      .brand span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      nav {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      nav a:hover {
+        color: var(--accent-deep);
+      }
+
+      .hero {
+        padding: 72px 0 40px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 32px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(167, 213, 149, 0.23);
+        color: var(--accent-deep);
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      h1 {
+        margin: 18px 0 18px;
+        font-size: clamp(2.7rem, 5vw, 5.2rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .hero p {
+        margin: 0 0 18px;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--muted);
+        max-width: 62ch;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 22px;
+        border-radius: 999px;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          background 0.18s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(36, 56, 30, 0.08);
+      }
+
+      .button.primary {
+        background: var(--ink);
+        color: white;
+        border-color: var(--ink);
+      }
+
+      .button.soft {
+        background: var(--surface);
+        color: var(--accent-deep);
+      }
+
+      .hero-card {
+        background: linear-gradient(180deg, #f0f7ea 0%, #ffffff 100%);
+        border: 1px solid rgba(217, 223, 207, 0.8);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .hero-card img {
+        width: 100%;
+        display: block;
+        border-radius: 22px;
+      }
+
+      .hero-caption {
+        padding: 16px 8px 4px;
+      }
+
+      .hero-caption strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .hero-caption span {
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      section {
+        padding: 26px 0 32px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(2rem, 3.2vw, 3rem);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+
+      .section-head p,
+      .section-copy {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .story {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 28px;
+      }
+
+      .panel h3 {
+        margin: 0 0 14px;
+        font-size: 1.25rem;
+      }
+
+      .panel p,
+      .panel li {
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .panel ul,
+      .steps ol {
+        margin: 14px 0 0;
+        padding-left: 22px;
+      }
+
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+
+      .step {
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        min-height: 215px;
+      }
+
+      .step-num {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: inline-grid;
+        place-items: center;
+        background: var(--ink);
+        color: white;
+        font-weight: 700;
+        margin-bottom: 18px;
+      }
+
+      .step h3 {
+        margin: 0 0 10px;
+        font-size: 1.15rem;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .audience {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 24px;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .chip {
+        padding: 11px 15px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fbfcf7;
+        color: var(--accent-deep);
+        font-weight: 600;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+      }
+
+      .gallery-stack {
+        display: grid;
+        gap: 18px;
+      }
+
+      .figure {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .figure img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .figure figcaption {
+        padding: 16px 18px 18px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .feature {
+        padding: 24px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .feature strong {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .footer-card {
+        background: linear-gradient(135deg, #181f18 0%, #243627 100%);
+        color: white;
+        border-radius: var(--radius-xl);
+        padding: 34px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .footer-card p {
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.7;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .footer-links .button {
+        border-color: rgba(255, 255, 255, 0.18);
+        color: white;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .site-note {
+        padding: 24px 0 46px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid,
+        .story,
+        .audience,
+        .gallery-grid,
+        .footer-card {
+          grid-template-columns: 1fr;
+        }
+
+        .workflow,
+        .feature-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .footer-links {
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .hero {
+          padding-top: 46px;
+        }
+
+        .workflow,
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .panel,
+        .step,
+        .feature,
+        .footer-card {
+          padding: 22px;
+        }
+
+        h1 {
+          line-height: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="#top">
+          <img src="images/logo.png" alt="NutriLens logo" />
+          <div>
+            <strong>NutriLens</strong>
+            <span>Wearable nutrition guidance</span>
+          </div>
+        </a>
+        <nav>
+          <a href="#purpose">Purpose</a>
+          <a href="#workflow">How It Works</a>
+          <a href="#hardware">Hardware</a>
+          <a href="#app">App</a>
+          <a href="#impact">Impact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div>
+            <div class="eyebrow">AI-powered smart glasses for nutrition guidance</div>
+            <h1>Turn everyday meals into moments of clarity.</h1>
+            <p>
+              NutriLens is a wearable food-analysis system that captures what a user is
+              about to eat, transfers the image to a mobile app, analyzes nutritional
+              content in real time, and can mirror the result back to a wearable display.
+            </p>
+            <p>
+              The goal is simple: make nutrition feedback more immediate, more accessible,
+              and less dependent on manual logging or technical health literacy.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#workflow">See the workflow</a>
+              <a class="button soft" href="https://sites.google.com/view/blakelinutrilens">View project site</a>
+            </div>
+          </div>
+          <div class="hero-card">
+            <img src="images/wearable-front.jpg" alt="NutriLens wearable hardware mounted on glasses" />
+            <div class="hero-caption">
+              <strong>Working wearable prototype</strong>
+              <span>Camera, control module, mobile app, and heads-up display workflow.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="purpose">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Purpose</h2>
+            <p>Built around a real problem, not just a technical demo.</p>
+          </div>
+          <div class="story">
+            <article class="panel">
+              <h3>The problem</h3>
+              <p>
+                Food insecurity is often described as a lack of consistent access to food,
+                but an equally important issue is the lack of nutritional understanding among
+                vulnerable populations. During SNAP funding disruptions, many underserved
+                families were left uncertain not only about securing meals, but also about
+                whether those meals supported their health needs.
+              </p>
+              <p>
+                Existing tools like calorie-tracking apps, printed guides, and nutrition
+                websites often require stable internet, time, and higher health literacy
+                than many users possess. The gap is not just food access. It is the absence
+                of simple, real-time nutrition guidance when decisions are actually made.
+              </p>
+            </article>
+            <article class="panel">
+              <h3>The response</h3>
+              <p>
+                NutriLens is an AI-powered smart-glasses system that provides real-time
+                nutritional information through automated food recognition. When a user
+                looks at a meal, the built-in camera captures visual data, the model
+                identifies foods and estimates portions, and the system generates key
+                nutritional values through a connected mobile application.
+              </p>
+              <p>
+                Instead of requiring manual scanning or typing, NutriLens is designed to
+                provide practical guidance through a more natural, hands-light workflow.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <div class="shell">
+          <div class="section-head">
+            <h2>How It Works</h2>
+            <p>From meal capture to mobile analysis to wearable feedback.</p>
+          </div>
+          <div class="workflow">
+            <article class="step">
+              <div class="step-num">01</div>
+              <h3>Capture</h3>
+              <p>
+                A camera mounted on the glasses frame captures the food image from the
+                user's point of view.
+              </p>
+            </article>
+            <article class="step">
+              <div class="step-num">02</div>
+              <h3>Transfer</h3>
+              <p>
+                The Raspberry Pi sends the image to the iPhone app over Bluetooth Low
+                Energy.
+              </p>
+            </article>
+            <article class="step">
+              <div class="step-num">03</div>
+              <h3>Analyze</h3>
+              <p>
+                Gemini estimates food items, calories, protein, carbohydrates, fat, and
+                a short health summary.
+              </p>
+            </article>
+            <article class="step">
+              <div class="step-num">04</div>
+              <h3>Reflect</h3>
+              <p>
+                The app displays the results, saves history for signed-in users, and can
+                mirror the latest nutrition stats back to the wearable HUD.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="hardware">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Wearable Hardware</h2>
+            <p>The prototype was built to be worn and tested, not just described.</p>
+          </div>
+          <div class="gallery-grid">
+            <figure class="figure">
+              <img src="images/wearable-side.jpg" alt="NutriLens side profile showing enclosure and frame integration" />
+              <figcaption>
+                The wearable prototype combines a camera mounted on the glasses frame, a
+                Raspberry Pi-based processing path, a custom enclosure, and display
+                hardware for mirrored results.
+              </figcaption>
+            </figure>
+            <div class="gallery-stack">
+              <figure class="figure">
+                <img src="images/wearable-front.jpg" alt="Front view of the NutriLens glasses prototype" />
+                <figcaption>
+                  Front-facing view of the integrated wearable system and display setup.
+                </figcaption>
+              </figure>
+              <article class="panel">
+                <h3>Prototype components</h3>
+                <ul>
+                  <li>camera mounted to the glasses frame</li>
+                  <li>Raspberry Pi-based processing unit</li>
+                  <li>physical control interface for interaction</li>
+                  <li>BLE communication with the mobile app</li>
+                  <li>optional heads-up display mirroring path</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="app">
+        <div class="shell">
+          <div class="section-head">
+            <h2>Mobile App</h2>
+            <p>The iPhone and iPad app is where the image becomes usable guidance.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature">
+              <strong>BLE connection flow</strong>
+              <p>
+                Users connect the phone to the Raspberry Pi, receive captured images, and
+                manage the hardware workflow from the app.
+              </p>
+            </article>
+            <article class="feature">
+              <strong>AI nutrition output</strong>
+              <p>
+                Each analysis includes detected food, calorie estimate, macros, and a short
+                summary designed to be easier to understand than a raw nutrition label.
+              </p>
+            </article>
+            <article class="feature">
+              <strong>History and account support</strong>
+              <p>
+                Signed-in users can save prior analyses, revisit them later, and manage
+                account access directly in the app.
+              </p>
+            </article>
+          </div>
+
+          <div class="gallery-grid" style="margin-top: 18px">
+            <figure class="figure">
+              <img src="images/app-analysis.png" alt="NutriLens iPhone analysis screen" />
+              <figcaption>
+                iPhone analysis view showing the capture / analysis flow and nutrition
+                output for a meal.
+              </figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="images/ipad-analysis.png" alt="NutriLens iPad analysis screen" />
+              <figcaption>
+                iPad layout showing the same analysis workflow scaled for larger screens.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="impact">
+        <div class="shell audience">
+          <article class="panel">
+            <h2 style="margin-bottom: 14px">Who It Is For</h2>
+            <p class="section-copy">
+              NutriLens aims to support people who need immediate nutritional information
+              but cannot rely on traditional methods.
+            </p>
+            <div class="chips">
+              <div class="chip">Underserved families</div>
+              <div class="chip">People managing chronic conditions</div>
+              <div class="chip">Older adults</div>
+              <div class="chip">Caregivers</div>
+              <div class="chip">Community health workers</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Why the system matters</h3>
+            <p>
+              Traditional nutrition apps often depend on manual meal entry and numerical
+              interpretation, which creates friction and discourages consistent use. By
+              recognizing food automatically through the user’s field of vision, NutriLens
+              is designed to make feedback more immediate and more usable at the moment it
+              matters.
+            </p>
+            <p>
+              The longer-term goal is not just convenience. It is to support healthier
+              decisions through accessible, everyday nutritional awareness.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <div class="footer-card">
+            <div>
+              <h2 style="margin: 0">Project Links</h2>
+              <p>
+                NutriLens combines wearable computing, on-body imaging, mobile AI analysis,
+                and real-time feedback into one prototype workflow.
+              </p>
+            </div>
+            <div class="footer-links">
+              <a class="button" href="https://sites.google.com/view/blakelinutrilens">Google Site</a>
+              <a class="button" href="https://github.com/Lovevalkyrie/NutriLens">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="shell site-note">
+      NutriLens provides AI-generated nutrition estimates for informational use and should
+      not be treated as medical advice.
+    </div>
+  </body>
+</html>
